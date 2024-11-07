@@ -1,5 +1,8 @@
 from flask import Flask, make_response
 
+from database import db
+
+
 app = Flask(__name__)
 
 @app.route('/')
