@@ -1,0 +1,12 @@
+services:
+  database:
+    image: postgres:16.4
+    container_name: database
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - ./database/src/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
