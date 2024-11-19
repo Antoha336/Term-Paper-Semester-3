@@ -6,10 +6,10 @@ services:
       context: ./database
     container_name: database
     ports:
-      - "5432:5432"
+      - "5000:5432"
     env_file:
       - .env
-    restart: always
+    restart: unless-stopped
 
   server:
     build:
@@ -19,7 +19,7 @@ services:
       - "5001:5001"
     env_file:
       - .env
-    restart: always
+    restart: unless-stopped
     depends_on:
       - database
   
@@ -29,6 +29,6 @@ services:
     container_name: frontend
     ports:
       - "5002:5002"
-    restart: always
+    restart: unless-stopped
     depends_on:
       - server

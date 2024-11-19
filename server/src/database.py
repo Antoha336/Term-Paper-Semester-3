@@ -6,13 +6,14 @@ from env import get_env_var
 
 Base = declarative_base()
 
-credits = {
-    'name': get_env_var('DATABASE_NAME'),
-    'user': get_env_var('DATABASE_USER'),
-    'password': get_env_var('DATABASE_PASSWORD'),
-}
+ENGINE = get_env_var('DATABASE_ENGINE')
+NAME = get_env_var('DATABASE_NAME')
+USER = get_env_var('DATABASE_USER')
+PASSWORD = get_env_var('DATABASE_PASSWORD')
+HOST = get_env_var('DATABASE_HOST')
+PORT = get_env_var('DATABASE_PORT')
 
-engine = create_engine(f'postgresql+psycopg2://{credits["user"]}:{credits["password"]}@database:5432/{credits["name"]}')
+engine = create_engine(f'{ENGINE}://{USER}:{PASSWORD}@{HOST}:{PORT}/{NAME}')
 Base.metadata.create_all(engine)
 
 db = scoped_session(sessionmaker(bind=engine))
