@@ -6,8 +6,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     TZ=Europe/Moscow
 
-COPY ./server/requirements.txt .
-COPY ./server/src .
+COPY ./services/user_server/requirements.txt .
+COPY ./services/user_server/src .
 COPY ./shared ./shared
 
 RUN pip install --no-cache-dir --upgrade pip

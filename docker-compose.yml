@@ -3,7 +3,7 @@ name: app
 services:
   database:
     build:
-      context: ./database
+      context: ./services/database
     container_name: database
     ports:
       - "5000:5432"
@@ -11,13 +11,26 @@ services:
       - .env
     restart: unless-stopped
 
-  server:
+  event_server:
     build:
-      dockerfile: ./server/Dockerfile
+      dockerfile: ./services/event_server/Dockerfile
       context: .
-    container_name: server
+    container_name: event-server
     ports:
       - "5001:5001"
+    env_file:
+      - .env
+    restart: unless-stopped
+    depends_on:
+      - database
+    
+  user_server:
+    build:
+      dockerfile: ./services/user_server/Dockerfile
+      context: .
+    container_name: user-server
+    ports:
+      - "5003:5003"
     env_file:
       - .env
     restart: unless-stopped
@@ -26,10 +39,11 @@ services:
   
   frontend:
     build:
-      context: ./frontend
+      context: ./services/frontend
     container_name: frontend
     ports:
       - "5002:5002"
     restart: unless-stopped
     depends_on:
-      - server
+      - event_server
+      - user_server
