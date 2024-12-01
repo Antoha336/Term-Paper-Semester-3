@@ -13,7 +13,8 @@ services:
 
   server:
     build:
-      context: ./server
+      dockerfile: ./server/Dockerfile
+      context: .
     container_name: server
     ports:
       - "5001:5001"

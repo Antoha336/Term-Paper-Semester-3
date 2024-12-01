@@ -1,6 +1,6 @@
 from flask import Flask, make_response
 
-from database import db
+from shared.database.database import session
 
 
 app = Flask(__name__)
