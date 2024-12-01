@@ -10,13 +10,6 @@ from shared.utils.env import get_env_var
 class Base(DeclarativeBase):
     pass
 
-ENGINE = get_env_var('DATABASE_ENGINE')
-NAME = get_env_var('DATABASE_NAME')
-USER = get_env_var('DATABASE_USER')
-PASSWORD = get_env_var('DATABASE_PASSWORD')
-HOST = get_env_var('DATABASE_HOST')
-PORT = get_env_var('DATABASE_PORT')
-
 class User(Base):
     __tablename__ = 'users'
     id            = Column(Integer, primary_key=True, autoincrement=True, unique=True)
@@ -29,7 +22,7 @@ class User(Base):
     events        = relationship('Event', secondary='event_users', back_populates='users')
 
     def set_password(self, password: str):
-        self.passowrd = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
     def verify_password(self, password: str) -> bool:
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
@@ -57,6 +50,13 @@ class EventUser(Base):
     event_id      = Column(Integer, ForeignKey('events.id'), primary_key=True)
     user_id       = Column(Integer, ForeignKey('users.id'), primary_key=True)
 
+
+ENGINE = get_env_var('DATABASE_ENGINE')
+NAME = get_env_var('DATABASE_NAME')
+USER = get_env_var('DATABASE_USER')
+PASSWORD = get_env_var('DATABASE_PASSWORD')
+HOST = get_env_var('DATABASE_HOST')
+PORT = get_env_var('DATABASE_PORT')
 
 engine = create_engine(f'{ENGINE}://{USER}:{PASSWORD}@{HOST}:{PORT}/{NAME}')
 Base.metadata.create_all(engine)
