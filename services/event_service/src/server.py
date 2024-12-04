@@ -1,9 +1,11 @@
 from flask import Flask, make_response
+from flask_cors import CORS
 
 from shared.database.database import session
 
 
 app = Flask(__name__)
+CORS(app, resources={'/*' : {"origins": "http://localhost:5002"}})
 
 @app.route('/')
 def home_page():

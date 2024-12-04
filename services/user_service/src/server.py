@@ -7,12 +7,14 @@ from flask_jwt_extended import (
     jwt_required,
     get_jwt_identity
 )
+from flask_cors import CORS
 from sqlalchemy import select
 from shared.utils.env import get_env_var
 from shared.database.database import session, User
 
 
 app = Flask(__name__)
+CORS(app, resources={'/*' : {"origins": "http://localhost:5002"}})
 
 app.config['JWT_SECRET_KEY'] = get_env_var('JWT_SECRET')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=1)
@@ -20,7 +22,7 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=1)
 jwt = JWTManager(app)
 
 
-@app.route('/login/', methods=['POST'])
+@app.route('/users/login/', methods=['POST'])
 def login():
     data = request.json
     email = data.get('email')
@@ -48,7 +50,7 @@ def login():
 def registration():
     data = request.json
     name =      data.get('name')
-    last_name = data.get('last_name')
+    last_name = data.get('lastname')
     email =     data.get('email')
     password =  data.get('password')
 

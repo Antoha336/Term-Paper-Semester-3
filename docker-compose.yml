@@ -11,9 +11,9 @@ services:
       - .env
     restart: unless-stopped
 
-  event_server:
+  event_service:
     build:
-      dockerfile: ./services/event_server/Dockerfile
+      dockerfile: ./services/event_service/Dockerfile
       context: .
     container_name: event-server
     ports:
@@ -24,9 +24,9 @@ services:
     depends_on:
       - database
     
-  user_server:
+  user_service:
     build:
-      dockerfile: ./services/user_server/Dockerfile
+      dockerfile: ./services/user_service/Dockerfile
       context: .
     container_name: user-server
     ports:
@@ -45,5 +45,5 @@ services:
       - "5002:5002"
     restart: unless-stopped
     depends_on:
-      - event_server
-      - user_server
+      - event_service
+      - user_service

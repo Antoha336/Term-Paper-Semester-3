@@ -6,8 +6,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     TZ=Europe/Moscow
 
-COPY ./services/event_server/requirements.txt .
-COPY ./services/event_server/src .
+COPY ./services/event_service/requirements.txt .
+COPY ./services/event_service/src .
 COPY ./shared ./shared
 
 RUN pip install --no-cache-dir --upgrade pip
