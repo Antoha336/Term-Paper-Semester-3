@@ -1,12 +1,7 @@
 import datetime
 
 from flask import Flask, jsonify, request, make_response
-from flask_jwt_extended import (
-    JWTManager,
-    create_access_token,
-    jwt_required,
-    get_jwt_identity
-)
+from jwt import ExpiredSignatureError, InvalidTokenError, decode, encode
 from flask_cors import CORS
 from sqlalchemy import select
 from shared.utils.env import get_env_var
@@ -16,10 +11,28 @@ from shared.database.database import session, User
 app = Flask(__name__)
 CORS(app, resources={'/*' : {"origins": "http://localhost:5002"}})
 
-app.config['JWT_SECRET_KEY'] = get_env_var('JWT_SECRET')
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=1)
+JWT_SECRET = get_env_var('JWT_SECRET')
+TOKEN_LIFETIME = datetime.timedelta(hours=1)
 
-jwt = JWTManager(app)
+@app.route('/users/auth/', methods=['GET'])
+def auth():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return jsonify({"error": "Token is missing or invalid"}), 401
+
+    token = auth_header.split(" ")[1]
+
+    try:
+        payload = decode(
+            jwt=token, 
+            key=JWT_SECRET, 
+            algorithms=['HS256'],
+        )
+        return jsonify({"payload": payload}), 200
+    except ExpiredSignatureError:
+        return jsonify({"error": "Token has expired"}), 401
+    except InvalidTokenError:
+        return jsonify({"error": "Invalid token"}), 401
 
 
 @app.route('/users/login/', methods=['POST'])
@@ -36,13 +49,18 @@ def login():
     if not user or not user.verify_password(password):
         return make_response({'detail': 'Could not validate credentials'}, 401)
     
-    access_token = create_access_token(identity={
-        'id': user.id, 
-        'name': user.name, 
-        'last_name': user.last_name, 
-        'email': user.email, 
-        'is_admin': user.is_admin
-    })
+    access_token = encode(
+        payload={
+            'id': user.id,
+            'name': user.name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'is_admin': user.is_admin,
+            'exp': datetime.datetime.now() + TOKEN_LIFETIME,
+        },
+        key=JWT_SECRET,
+        algorithm='HS256',
+    )
 
     return make_response({'access_token': access_token}, 200)
 
