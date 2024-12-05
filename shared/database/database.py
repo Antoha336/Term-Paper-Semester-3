@@ -39,8 +39,10 @@ class Event(Base):
     id            = Column(Integer, primary_key=True, autoincrement=True, unique=True)
     name          = Column(String, nullable=False)
     description   = Column(String, nullable=True)
+    location      = Column(String, nullable=False)
     status        = Column(Enum(EventStatusEnum, create_type=False), nullable=False, default=EventStatusEnum.REGISTRAION_STARTED)
-    starting_date = Column(DateTime, nullable=False)
+    date          = Column(DateTime, nullable=False)
+    user_id       = Column(Integer, ForeignKey('users.id'), nullable=False)
 
     users         = relationship('User', secondary='event_users', back_populates='events')
 
