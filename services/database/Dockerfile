@@ -7,4 +7,4 @@ COPY ./src/init.sql /docker-entrypoint-initdb.d/
 
 RUN chmod +x /docker-entrypoint-initdb.d/init.sql
 
-EXPOSE 5000
+EXPOSE 5432

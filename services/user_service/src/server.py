@@ -9,7 +9,7 @@ from shared.database.database import session, User
 
 
 app = Flask(__name__)
-CORS(app, resources={'/*' : {"origins": "http://localhost:5002"}})
+CORS(app, resources={'/*' : {"origins": "*"}})
 
 JWT_SECRET = get_env_var('JWT_SECRET')
 TOKEN_LIFETIME = datetime.timedelta(hours=1)
@@ -92,4 +92,4 @@ def registration():
     return make_response('', 204)
 
 if __name__ == '__main__':
-    server = app.run(host='0.0.0.0', port=5003)
+    server = app.run(host='0.0.0.0', port=5001)

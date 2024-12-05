@@ -39,7 +39,7 @@ class Event(Base):
     id            = Column(Integer, primary_key=True, autoincrement=True, unique=True)
     name          = Column(String, nullable=False)
     description   = Column(String, nullable=True)
-    status        = Column(Enum(EventStatusEnum), nullable=False, default=EventStatusEnum.REGISTRAION_STARTED)
+    status        = Column(Enum(EventStatusEnum, create_type=False), nullable=False, default=EventStatusEnum.REGISTRAION_STARTED)
     starting_date = Column(DateTime, nullable=False)
 
     users         = relationship('User', secondary='event_users', back_populates='events')
@@ -51,12 +51,12 @@ class EventUser(Base):
     user_id       = Column(Integer, ForeignKey('users.id'), primary_key=True)
 
 
-ENGINE = get_env_var('DATABASE_ENGINE')
-NAME = get_env_var('DATABASE_NAME')
-USER = get_env_var('DATABASE_USER')
+ENGINE   = get_env_var('DATABASE_ENGINE')
+NAME     = get_env_var('DATABASE_NAME')
+USER     = get_env_var('DATABASE_USER')
 PASSWORD = get_env_var('DATABASE_PASSWORD')
-HOST = get_env_var('DATABASE_HOST')
-PORT = get_env_var('DATABASE_PORT')
+HOST     = get_env_var('DATABASE_HOST')
+PORT     = get_env_var('DATABASE_PORT')
 
 engine = create_engine(f'{ENGINE}://{USER}:{PASSWORD}@{HOST}:{PORT}/{NAME}')
 Base.metadata.create_all(engine)

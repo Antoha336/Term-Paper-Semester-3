@@ -4,6 +4,6 @@ COPY ./src/nginx.conf /etc/nginx/nginx.conf
 
 COPY ./src/build /usr/share/nginx/html
 
-EXPOSE 5002
+EXPOSE 5000
 
 CMD ["nginx", "-g", "daemon off;"]

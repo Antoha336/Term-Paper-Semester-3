@@ -10,9 +10,10 @@ COPY ./services/event_service/requirements.txt .
 COPY ./services/event_service/src .
 COPY ./shared ./shared
 
-RUN pip install --no-cache-dir --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip
 
-EXPOSE 5001
+RUN pip install -r requirements.txt
+
+EXPOSE 5002
 
 CMD ["python", "./server.py"]

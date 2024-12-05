@@ -1,49 +1,55 @@
 name: app
 
+networks:
+  internal:
+    driver: bridge
+
 services:
   database:
     build:
       context: ./services/database
     container_name: database
-    ports:
-      - "5000:5432"
     env_file:
       - .env
     restart: unless-stopped
+    networks:
+      - internal
 
-  event_service:
+  event-service:
     build:
       dockerfile: ./services/event_service/Dockerfile
       context: .
-    container_name: event-server
-    ports:
-      - "5001:5001"
+    container_name: event-service
     env_file:
       - .env
     restart: unless-stopped
     depends_on:
       - database
+    networks:
+      - internal
     
-  user_service:
+  user-service:
     build:
       dockerfile: ./services/user_service/Dockerfile
       context: .
-    container_name: user-server
-    ports:
-      - "5003:5003"
+    container_name: user-service
     env_file:
       - .env
     restart: unless-stopped
     depends_on:
       - database
+    networks:
+      - internal
   
   frontend:
     build:
       context: ./services/frontend
     container_name: frontend
     ports:
-      - "5002:5002"
+      - "5000:5000"
     restart: unless-stopped
     depends_on:
-      - event_service
-      - user_service
+      - event-service
+      - user-service
+    networks:
+      - internal
