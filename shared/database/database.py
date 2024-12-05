@@ -28,21 +28,14 @@ class User(Base):
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
 
 
-class EventStatusEnum(str, enum.Enum):
-    REGISTRAION_STARTED = 'registration_started'
-    REGISTRAION_ENDED   = 'registration_ended'
-    EVENT_STARTED       = 'event_started'
-    EVENT_ENDED         = 'event_ended'
-
 class Event(Base):
     __tablename__ = 'events'
     id            = Column(Integer, primary_key=True, autoincrement=True, unique=True)
+    is_available  = Column(Boolean, nullable=False, default=True)
     name          = Column(String, nullable=False)
-    description   = Column(String, nullable=True)
-    location      = Column(String, nullable=False)
-    status        = Column(Enum(EventStatusEnum, create_type=False), nullable=False, default=EventStatusEnum.REGISTRAION_STARTED)
+    price         = Column(Integer, nullable=False)
     date          = Column(DateTime, nullable=False)
-    user_id       = Column(Integer, ForeignKey('users.id'), nullable=False)
+    location      = Column(String, nullable=False)
 
     users         = relationship('User', secondary='event_users', back_populates='events')
 

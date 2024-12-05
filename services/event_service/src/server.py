@@ -5,7 +5,7 @@ from flask_cors import CORS
 from sqlalchemy import select
 
 from shared.database.database import session, Event, EventUser
-from shared.schemas.event import SGetEvent
+from shared.schemas.events import SGetEvent
 
 
 app = Flask(__name__)
@@ -13,7 +13,7 @@ CORS(app, resources={'/*' : {"origins": "*"}})
 
 @app.route('/events/', methods=['GET'])
 def list_events():
-    query = select(Event)
+    query = select(Event).where(Event.is_available == True)
     results = session.execute(query).scalars()
     events = list(SGetEvent.model_validate(event).model_dump(mode='json') for event in results)
 
