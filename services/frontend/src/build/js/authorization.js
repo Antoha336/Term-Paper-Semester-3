@@ -9,13 +9,20 @@ async function check_authorization() {
     });
     if (!response.ok) {
         window.location.href = "login.html";
-        throw Error('Unauthorized');
+        throw Error('Unauthenticated');
     }
 
     const data = await response.json()
     payload = data['payload']
 
     return payload
+}
+
+async function check_admin_rights() {
+    await check_authorization();
+    if (!payload['is_admin']) {
+        throw Error('Unauthorized');
+    }
 }
 
 function logout() {

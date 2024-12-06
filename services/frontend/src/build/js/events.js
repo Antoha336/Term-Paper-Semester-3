@@ -15,15 +15,6 @@ const modalCloseButton      = eventModal.querySelector('.modal-close-button');
 
 const colors = ['#FF6F61', '#6B5B95', '#88B04B', '#F7CAC9', '#92A8D1', '#FFB347', '#D5AAFF'];
 
-function format_date(string_date) {
-    return new Intl.DateTimeFormat('ru-RU', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-    }).format(new Date(string_date));
-}
 
 function toggleRegistrationButton(is_registered, is_available) {
     modalRegisterButton.disabled      = !is_available;

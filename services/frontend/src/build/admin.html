@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <ul class="navbar-list">
+                <li><a href="index.html" class="navbar-link">Мероприятия</a></li>
+                <li><a href="profile.html" class="navbar-link">Мой профиль</a></li>
+            </ul>
+            <a id="logout-button" class="navbar-link">Выйти</a>
+        </nav>
+    </header>
+    <main>
+        <section class="section admin-section">
+            <button class="create-event-button">Создать мероприятие</button>
+            <div class="event-table">
+                <div class="event-table-header">
+                    <div class="event-header-cell">Название</div>
+                    <div class="event-header-cell">Описание</div>
+                    <div class="event-header-cell">Дата</div>
+                    <div class="event-header-cell">Место</div>
+                    <div class="event-header-cell">Статус</div>
+                    <div class="event-header-cell">Действия</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <template id="event-row-template">
+        <div class="event-row">
+            <div id="name" class="event-cell"></div>
+            <div id="description" class="event-cell"></div>
+            <div id="date" class="event-cell"></div>
+            <div id="location" class="event-cell"></div>
+            <div id="status" class="event-cell"></div>
+            <div class="event-cell actions">
+                <button class="action-button toggle-registration">Открыть регистрацию</button>
+                <button class="action-button edit">Изменить</button>
+                <button class="action-button delete">Удалить</button>
+            </div>
+        </div>
+    </template>
+
+    <dialog id="create-event-modal" class="event-modal">
+        <button class="modal-close-button">✖</button>
+        <h2>Создать мероприятие</h2>
+        <form id="create-event-form">
+            <input type="text" placeholder="Название" class="form-input" required>
+            <input type="date" class="form-input" required>
+            <input type="text" placeholder="Место проведения" class="form-input" required>
+            <input type="number" placeholder="Цена" class="form-input" required>
+            <button type="submit" class="form-submit-button">Создать</button>
+        </form>
+    </dialog>
+
+    <script src="js/base.js"></script>
+    <script src="js/authorization.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+
+</html>
