@@ -1,3 +1,4 @@
+const logoutButton = document.querySelector('#logout-button')
 const token = localStorage.getItem('token')
 let payload = null;
 
@@ -21,3 +22,5 @@ function logout() {
     localStorage.removeItem('token');
     window.location.href = "login.html";
 }
+
+logoutButton.addEventListener('click', logout);

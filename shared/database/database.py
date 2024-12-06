@@ -34,7 +34,6 @@ class Event(Base):
     is_available  = Column(Boolean, nullable=False, default=True)
     name          = Column(String, nullable=False)
     description   = Column(String, nullable=True)
-    price         = Column(Integer, nullable=False)
     date          = Column(DateTime, nullable=False)
     location      = Column(String, nullable=False)
 

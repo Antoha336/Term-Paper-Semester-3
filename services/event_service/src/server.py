@@ -69,15 +69,18 @@ def register_for_event(event_id: int):
         return result
 
     user_id = result['id']
-    existing_registration = session.query(EventUser).filter_by(user_id=user_id, event_id=event_id).first()
-    if existing_registration:
-        return make_response({'detail': 'Вы уже зарегистрированы на это мероприятие'}), 400
-
-    event_user = EventUser(user_id=user_id, event_id=event_id)
-    session.add(event_user)
+    query = select(EventUser).where(and_(EventUser.user_id == user_id, EventUser.event_id == event_id))
+    existing_registration = session.execute(query).scalar_one_or_none()
+    if (existing_registration is not None):
+        session.delete(existing_registration)
+        event.is_registered = False
+    else:
+        event_user = EventUser(user_id=user_id, event_id=event_id)
+        session.add(event_user)
+        event.is_registered = True
     session.commit()
 
-    return make_response({"message": "User successfully registered for the event"}, 200)
+    return make_response(SGetEvent.model_validate(event).model_dump(mode='json'), 200)
 
 if __name__ == "__main__":
     server = app.run(host='0.0.0.0', port=5002)
