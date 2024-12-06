@@ -19,7 +19,7 @@
         </nav>
     </header>
     <main>
-        <section class="available-events">
+        <section class="section available-events">
             <h1>Мероприятия для вас</h1>
             <div class="events-container">
 
@@ -37,6 +37,16 @@
             </div>
         </div>
     </template>
+
+    <dialog id="event-modal" class="event-modal">
+        <button class="modal-close-button">✖</button>
+        <h2 class="modal-event-name"></h2>
+        <p class="modal-event-description"></p>
+        <p><b>Цена:</b> <span class="modal-event-price"></span></p>
+        <p><b>Место:</b> <span class="modal-event-location"></span></p>
+        <p><b>Дата:</b> <span class="modal-event-date"></span></p>
+        <button class="modal-register-button"></button>
+    </dialog>
 
     <script src="js/check_auth.js"></script>
     <script src="js/index.js"></script>

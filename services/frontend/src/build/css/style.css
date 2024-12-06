@@ -1,5 +1,9 @@
 @import url(./normalize.css);
 
+p, h1, h2, h3 {
+    margin: 0;
+}
+
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -46,11 +50,14 @@ body {
     text-decoration: underline;
 }
 
+.section {
+    margin: 20px auto 0;
+}
+
 .available-events {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0px auto;
     width: 90%;
 }
 
@@ -128,4 +135,66 @@ body {
     font-size: 14px;
     padding: 5px 10px;
     border-radius: 5px;
+}
+
+.event-modal {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 400px;
+    max-width: 90%;
+    background-color: white;
+    position: relative;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #333;
+}
+
+.modal-close-button:hover {
+    color: #007BFF;
+}
+
+.modal-register-button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.modal-register-button:disabled {
+    background-color: rgba(0, 0, 0, 0.13);
+    cursor: not-allowed;
+}
+
+.modal-register-button:enabled:hover {
+    background-color: #0056b3;
+}
+
+.event-modal[open] {
+    animation: fadeIn 0.3s ease-in-out;
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
