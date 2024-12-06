@@ -15,10 +15,24 @@ const modalEventLocation    = eventModal.querySelector('.modal-event-location');
 const modalEventDate        = eventModal.querySelector('.modal-event-date');
 const modalRegisterButton   = eventModal.querySelector('.modal-register-button');
 
+const profileInfoForm       = document.forms['profile'];
+const profileInfoEmail      = profileInfoForm.email;
+const profileInfoName       = profileInfoForm.name;
+const profileInfoLastname   = profileInfoForm.lastname;
+
 const logoutButton = document.querySelector('#logout-button')
 
 const colors = ['#FF6F61', '#6B5B95', '#88B04B', '#F7CAC9', '#92A8D1', '#FFB347', '#D5AAFF'];
 
+function toggleRegistrationButton(is_registered) {
+    modalRegisterButton.disabled      = is_registered;
+    modalRegisterButton.textContent   = is_registered ? 'Вы уже зарегистрированы' : 'Зарегистрироваться';
+}
+
+function logout() {
+    localStorage.removeItem('token')
+    window.location.href = "login.html";
+}
 
 function format_date(string_date) {
     return new Intl.DateTimeFormat('ru-RU', {
@@ -28,11 +42,6 @@ function format_date(string_date) {
         hour: '2-digit',
         minute: '2-digit',
     }).format(new Date(string_date));
-}
-
-function toggleRegistrationButton(is_registered) {
-    modalRegisterButton.disabled      = is_registered;
-    modalRegisterButton.textContent   = is_registered ? 'Вы уже зарегистрированы' : 'Зарегистрироваться';
 }
 
 function renderEvents(events) {
@@ -54,7 +63,10 @@ function renderEvents(events) {
 
 async function fetchEvents() {
     try {
-        const response = await fetch('/event-service/events/');
+        const response = await fetch('/event-service/events/me/', {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${token}` },
+        });
         if (!response.ok) {
             throw new Error('Ошибка получения мероприятий');
         }
@@ -67,25 +79,10 @@ async function fetchEvents() {
     }
 }
 
-async function registerForEvent(eventId) {
-    try {
-        const response = await fetch(`/event-service/events/${eventId}/register/`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        });
-
-        if (response.ok) {
-            toggleRegistrationButton(true);
-        } else {
-            toggleRegistrationButton(false);
-            alert('Ошибка регистрации.');
-        }
-    } catch (error) {
-        console.log(error);
-        alert('Произошла ошибка.');
-    }
+function fetchUserInfo() {
+    profileInfoEmail.value    = payload['email'];
+    profileInfoName.value     = payload['name'];
+    profileInfoLastname.value = payload['lastname'];
 }
 
 async function showEventDetails(eventId) {
@@ -114,8 +111,8 @@ function closeModal() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     await check_authorization();
+    fetchUserInfo();
     fetchEvents();
 });
 modalCloseButton.addEventListener('click', closeModal);
 logoutButton.addEventListener('click', logout);
-

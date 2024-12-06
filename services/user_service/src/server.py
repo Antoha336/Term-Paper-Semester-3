@@ -4,9 +4,10 @@ from flask import Flask, jsonify, request, make_response
 from jwt import ExpiredSignatureError, InvalidTokenError, decode, encode
 from flask_cors import CORS
 from sqlalchemy import select
+
 from shared.utils.env import get_env_var
 from shared.database.database import session, User
-
+from shared.schemas.users import STokenPayload
 
 app = Flask(__name__)
 CORS(app, resources={'/*' : {"origins": "*"}})
@@ -48,16 +49,10 @@ def login():
     user = session.execute(query).scalar()
     if not user or not user.verify_password(password):
         return make_response({'detail': 'Could not validate credentials'}, 401)
+    user.exp = datetime.datetime.now() + TOKEN_LIFETIME
     
     access_token = encode(
-        payload={
-            'id': user.id,
-            'name': user.name,
-            'last_name': user.last_name,
-            'email': user.email,
-            'is_admin': user.is_admin,
-            'exp': datetime.datetime.now() + TOKEN_LIFETIME,
-        },
+        payload=STokenPayload.model_validate(user).model_dump(),
         key=JWT_SECRET,
         algorithm='HS256',
     )
@@ -68,11 +63,11 @@ def login():
 def registration():
     data = request.json
     name =      data.get('name')
-    last_name = data.get('lastname')
+    lastname = data.get('lastname')
     email =     data.get('email')
     password =  data.get('password')
 
-    if not email or not password or not name or not last_name:
+    if not email or not password or not name or not lastname:
         return make_response({'detail': 'Invalid input'}, 400)
 
     query = select(User).where(User.email == email)
@@ -82,7 +77,7 @@ def registration():
     
     user = User(
         name=name,
-        last_name=last_name,
+        lastname=lastname,
         email=email,
     )
     user.set_password(password)

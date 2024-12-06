@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Главная</title>
+    <title>Профиль</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/profile.css">
 </head>
 
 <body>
@@ -19,12 +20,22 @@
         </nav>
     </header>
     <main>
-        <section class="section available-events">
-            <h1>Мероприятия для вас</h1>
+        <div class="section profile-container">
+            <h1>Мои данные</h1>
+        
+            <form name="profile" class="profile-form">
+                <input name="email" type="email" class="profile-input profile-email" placeholder="Почта" readonly>
+                <input name="name" type="text" class="profile-input profile-name" placeholder="Имя">
+                <input name="lastname" type="text" class="profile-input profile-lastname" placeholder="Фамилия">
+                <button type="submit" class="profile-button">Сохранить</button>
+            </form>
+        </div>
+        <div class="section available-events">
+            <h1>Мои события</h1>
             <div class="events-container">
 
             </div>
-        </section>
+        </div>
     </main>
 
     <template id="event-card-template">
@@ -49,7 +60,7 @@
     </dialog>
 
     <script src="js/authorization.js"></script>
-    <script src="js/index.js"></script>
+    <script src="js/profile.js"></script>
 </body>
 
 </html>

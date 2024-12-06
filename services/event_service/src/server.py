@@ -21,6 +21,23 @@ def list_events():
     return make_response(events, 200)
 
 
+@app.route('/events/me/', methods=['GET'])
+def list_user_events():
+    is_auth, result = check_auth(request.headers)
+    if not is_auth:
+        return result
+    
+    user_id = int(result['id'])
+    query = select(EventUser.event_id).where(EventUser.user_id == user_id)
+    event_ids = session.execute(query).scalars().all()
+
+    query = select(Event).where(Event.id.in_(event_ids))
+    results = session.execute(query).scalars()
+    events = list(SGetEvent.model_validate(event).model_dump(mode='json') for event in results)
+
+    return make_response(events, 200)
+
+
 @app.route('/events/<int:event_id>/', methods=['GET'])
 def get_event(event_id: int):
     is_auth, result = check_auth(request.headers)
