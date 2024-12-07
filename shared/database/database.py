@@ -1,7 +1,7 @@
 import enum
 import bcrypt
 
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime, Enum, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime, ForeignKey, select
 from sqlalchemy.orm import DeclarativeBase, sessionmaker, scoped_session, relationship
 
 from shared.utils.env import get_env_var
@@ -55,5 +55,21 @@ PORT     = get_env_var('DATABASE_PORT')
 
 engine = create_engine(f'{ENGINE}://{USER}:{PASSWORD}@{HOST}:{PORT}/{NAME}')
 Base.metadata.create_all(engine)
-
 session = scoped_session(sessionmaker(bind=engine))
+
+
+query = select(User).where(User.is_admin == True)
+admin_user_exists = session.execute(query).scalar_one_or_none() is not None
+if not admin_user_exists:
+    ADMIN_EMAIL = get_env_var('ADMIN_EMAIL')
+    ADMIN_PASSWORD = get_env_var('ADMIN_PASSWORD')
+
+    admin_user = User(
+        email=ADMIN_EMAIL,
+        name='Антон',
+        lastname='Маркаданов',
+        is_admin=True,
+    )
+    admin_user.set_password(ADMIN_PASSWORD)
+    session.add(admin_user)
+    session.commit()
