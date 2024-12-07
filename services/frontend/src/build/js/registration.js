@@ -4,7 +4,7 @@ fetch('/user-service/users/auth/', {
     headers: { 'Authorization': `Bearer ${token}` },
 }).then(async response => {
     if (response.ok) {
-        window.location.href = "index.html";
+        window.location.href = "index";
     }
 })
 
@@ -24,7 +24,7 @@ document.forms['registration'].addEventListener('submit', async (e) => {
 
     if (response.ok) {
         alert('Регистрация успешна');
-        window.location.href = "login.html";
+        window.location.href = "login";
     } else {
         alert('Ошибка регистрации');
     }

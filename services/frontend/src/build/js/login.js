@@ -4,7 +4,7 @@ fetch('/user-service/users/auth/', {
     headers: { 'Authorization': `Bearer ${token}` },
 }).then(async response => {
     if (response.ok) {
-        window.location.href = "index.html";
+        window.location.href = "index";
     }
 })
 
@@ -23,7 +23,7 @@ document.forms['login'].addEventListener('submit', async (e) => {
     if (response.ok) {
         const data = await response.json();
         localStorage.setItem('token', data.access_token);
-        window.location.href = "index.html";
+        window.location.href = "index";
     } else {
         alert('Неправильная почта или пароль');
     }

@@ -8,7 +8,7 @@ async function check_authorization() {
         headers: { 'Authorization': `Bearer ${token}` },
     });
     if (!response.ok) {
-        window.location.href = "login.html";
+        window.location.href = "login";
         throw Error('Unauthenticated');
     }
 
@@ -27,7 +27,7 @@ async function check_admin_rights() {
 
 function logout() {
     localStorage.removeItem('token');
-    window.location.href = "login.html";
+    window.location.href = "login";
 }
 
 logoutButton.addEventListener('click', logout);
