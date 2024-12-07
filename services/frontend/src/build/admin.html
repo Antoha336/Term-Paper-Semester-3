@@ -42,7 +42,6 @@
             <div id="location" class="event-cell"></div>
             <div id="status" class="event-cell"></div>
             <div class="event-cell actions">
-                <button class="action-button toggle-registration">Открыть регистрацию</button>
                 <button class="action-button edit">Изменить</button>
                 <button class="action-button delete">Удалить</button>
             </div>
@@ -52,13 +51,19 @@
     <dialog id="create-event-modal" class="event-modal">
         <button class="modal-close-button">✖</button>
         <h2>Создать мероприятие</h2>
-        <form id="create-event-form">
-            <input type="text" placeholder="Название" class="form-input" required>
-            <input type="date" class="form-input" required>
-            <input type="text" placeholder="Место проведения" class="form-input" required>
-            <input type="number" placeholder="Цена" class="form-input" required>
-            <button type="submit" class="form-submit-button">Создать</button>
+        <div>
+        <form name="event">
+            <input name="name" type="text" placeholder="Название" class="form-input" required>
+            <input name="description" type="text" placeholder="Описание" class="form-input">
+            <input name="date" type="datetime-local" class="form-input" required>
+            <input name="location" type="text" placeholder="Место проведения" class="form-input" required>
+            <select name="is_available" class="form-input" style="max-width: 400px;" required>
+                <option value="true">Открыто для регистрации</option>
+                <option value="false">Закрыто для регистрации</option>
+            </select>
+            <button name="sumbit" type="submit" class="form-submit-button">Создать</button>
         </form>
+        </div>
     </dialog>
 
     <script src="js/base.js"></script>

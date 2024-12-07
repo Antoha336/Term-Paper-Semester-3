@@ -42,11 +42,6 @@ async function registerForEvent(eventId) {
     }
 }
 
-function closeEventDetails() {
-    eventModal.close();
-    modalCloseButton.removeEventListener('click', closeEventDetails)
-}
-
 async function showEventDetails(eventId, eventCardElement, deleteCard) {
     const response = await fetch(`/event-service/events/${eventId}/`, {
         method: 'GET',
@@ -68,13 +63,12 @@ async function showEventDetails(eventId, eventCardElement, deleteCard) {
             if (deleteCard) {
                 eventCardElement.remove();
             }
-            closeEventDetails();
+            closeModal(eventModal);
         }
     };
-    modalCloseButton.addEventListener('click', closeEventDetails);
     toggleRegistrationButton(event.is_registered, event.is_available);
     
-    eventModal.showModal();
+    openModal(eventModal);
 }
 
 function renderEvents(events, deleteCard) {

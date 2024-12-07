@@ -29,3 +29,16 @@ async function request(link, method, {auth_token = undefined, body = undefined, 
 
     return response;
 }
+
+function closeModal(modal) {
+    modal.close();
+}
+
+function openModal(modal) {
+    const closeButton = modal.querySelector('.modal-close-button');
+    closeButton.addEventListener('click', (evt) => {
+        closeModal(modal);
+    });
+
+    modal.showModal();
+}

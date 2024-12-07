@@ -5,7 +5,7 @@ from flask_cors import CORS
 from sqlalchemy import select, and_
 
 from shared.database.database import session, Event, EventUser
-from shared.schemas.events import SGetEvent, SUpdateEvent, SEventQueryParams
+from shared.schemas.events import SGetEvent, SCreateEvent, SUpdateEvent, SEventQueryParams
 from shared.utils.authorization import check_authorization, check_admin_permission
 
 
@@ -16,13 +16,27 @@ CORS(app, resources={'/*' : {"origins": "*"}})
 def list_events():
     params = SEventQueryParams(**request.args)
 
-    query = select(Event)
+    query = select(Event).order_by(Event.id)
     if params.is_available is not None:
         query = query.where(Event.is_available == params.is_available)
     results = session.execute(query).scalars()
     events = list(SGetEvent.model_validate(event).model_dump(mode='json') for event in results)
 
     return jsonify(events), 200
+
+
+@app.route('/events/', methods=['POST'])
+def create_event():
+    is_auth, result = check_admin_permission(request.headers)
+    if not is_auth:
+        return result
+    
+    data = SCreateEvent.model_validate_json(request.json).model_dump()
+    event = Event(**data)
+    session.add(event)
+    session.commit()
+
+    return jsonify(SGetEvent.model_validate(event).model_dump(mode='json')), 201
 
 
 @app.route('/events/me/', methods=['GET'])
@@ -35,7 +49,7 @@ def list_user_events():
     query = select(EventUser.event_id).where(EventUser.user_id == user_id)
     event_ids = session.execute(query).scalars().all()
 
-    query = select(Event).where(Event.id.in_(event_ids))
+    query = select(Event).where(Event.id.in_(event_ids)).order_by(Event.id)
     results = session.execute(query).scalars()
     events = list(SGetEvent.model_validate(event).model_dump(mode='json') for event in results)
 
@@ -67,8 +81,9 @@ def update_event(event_id: int):
     is_auth, result = check_admin_permission(request.headers)
     if not is_auth:
         return result
-
+    print(request.json)
     data = SUpdateEvent.model_validate_json(request.json).model_dump()
+    print(data)
     query = select(Event).where(Event.id == event_id)
     event = session.execute(query).scalar_one_or_none()
     for key, value in data.items():

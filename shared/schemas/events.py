@@ -15,7 +15,15 @@ class SGetEvent(Base):
     date:          datetime
     location:      str
     is_registered: bool     | None = None
-    
+
+
+class SCreateEvent(Base):
+    is_available:  bool
+    name:          str
+    description:   str
+    date:          datetime
+    location:      str
+
 
 class SUpdateEvent(Base):
     is_available:  bool     | None = None
