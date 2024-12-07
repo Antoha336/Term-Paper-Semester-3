@@ -1,5 +1,5 @@
 const token = localStorage.getItem('token')
-fetch('/user-service/users/auth/', {
+fetch(`${USER_SERVICE_URL}/users/auth/`, {
     method: 'GET',
     headers: { 'Authorization': `Bearer ${token}` },
 }).then(async response => {
@@ -14,7 +14,7 @@ document.forms['login'].addEventListener('submit', async (e) => {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
 
-    const response = await fetch('/user-service/users/login/', {
+    const response = await fetch(`${USER_SERVICE_URL}/users/login/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })

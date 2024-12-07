@@ -33,7 +33,7 @@ function createEventRow(event) {
     const eventCardElement = eventCardBuffer.cloneNode(true);
     const eventCardEditButton = eventCardElement.querySelector('.edit');
     const eventCardDeleteButton = eventCardElement.querySelector('.delete');
-    
+
     eventCardEditButton.addEventListener('click', () => {
         openEditEventModal(event);
     });
@@ -87,7 +87,7 @@ async function refetchEvents() {
 }
 
 async function fetchEvents() {
-    const response = await request('/event-service/events/', 'GET', {
+    const response = await request(`${EVENT_SERVICE_URL}/events/`, 'GET', {
         auth_token: token,
         error: 'Unable to fetch events',
     });
@@ -97,7 +97,7 @@ async function fetchEvents() {
 }
 
 async function createEvent(data) {
-    const response = await request(`/event-service/events/`, 'POST', {
+    const response = await request(`${EVENT_SERVICE_URL}/events/`, 'POST', {
         auth_token: token,
         body: JSON.stringify(data),
     });
@@ -107,7 +107,7 @@ async function createEvent(data) {
 }
 
 async function editEvent(eventId, data) {
-    const response = await request(`/event-service/events/${eventId}/`, 'PATCH', {
+    const response = await request(`${EVENT_SERVICE_URL}/events/${eventId}/`, 'PATCH', {
         auth_token: token,
         body: JSON.stringify(data),
     });
@@ -117,7 +117,7 @@ async function editEvent(eventId, data) {
 }
 
 async function deleteEvent(eventId) {
-    await request(`/event-service/events/${eventId}/`, 'DELETE', {
+    await request(`${EVENT_SERVICE_URL}/events/${eventId}/`, 'DELETE', {
         auth_token: token,
     });
 }

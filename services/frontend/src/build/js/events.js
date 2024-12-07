@@ -25,7 +25,7 @@ function toggleRegistrationButton(is_registered, is_available) {
 
 async function registerForEvent(eventId) {
     try {
-        const response = await fetch(`/event-service/events/${eventId}/register/`, {
+        const response = await fetch(`${EVENT_SERVICE_URL}/events/${eventId}/register/`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -43,7 +43,7 @@ async function registerForEvent(eventId) {
 }
 
 async function showEventDetails(eventId, eventCardElement, deleteCard) {
-    const response = await fetch(`/event-service/events/${eventId}/`, {
+    const response = await fetch(`${EVENT_SERVICE_URL}/events/${eventId}/`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,

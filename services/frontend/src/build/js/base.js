@@ -1,3 +1,6 @@
+const USER_SERVICE_URL  = '/user-service'
+const EVENT_SERVICE_URL = '/event-service'
+
 function format_date(string_date) {
     return new Intl.DateTimeFormat('ru-RU', {
         year: 'numeric',

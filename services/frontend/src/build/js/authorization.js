@@ -3,7 +3,7 @@ const token = localStorage.getItem('token')
 let payload = null;
 
 async function check_authorization() {
-    const response = await fetch('/user-service/users/auth/', {
+    const response = await fetch(`${USER_SERVICE_URL}/users/auth/`, {
         method: 'GET',
         headers: { 'Authorization': `Bearer ${token}` },
     });

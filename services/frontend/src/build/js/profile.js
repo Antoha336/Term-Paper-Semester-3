@@ -14,6 +14,6 @@ function fetchUserInfo() {
 document.addEventListener('DOMContentLoaded', async () => {
     await check_authorization();
     fetchUserInfo();
-    fetchEvents('/event-service/events/me/', true);
+    fetchEvents(`${EVENT_SERVICE_URL}/events/me/`, true);
 });
 
