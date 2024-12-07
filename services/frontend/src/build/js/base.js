@@ -7,3 +7,25 @@ function format_date(string_date) {
         minute: '2-digit',
     }).format(new Date(string_date));
 }
+
+async function request(link, method, {auth_token = undefined, body = undefined, error = ''}) {
+    const options = {
+        method: method,
+        headers: {},
+    };
+
+    if (auth_token !== undefined) {
+        options.headers['Authorization'] = `Bearer ${auth_token}`;
+    }
+    if (body !== undefined) {
+        options.body = JSON.stringify(body);
+        options.headers['Content-Type'] = 'application/json';
+    }
+
+    const response = await fetch(link, options);
+    if (!response.ok) {
+        throw Error(error);
+    }
+
+    return response;
+}

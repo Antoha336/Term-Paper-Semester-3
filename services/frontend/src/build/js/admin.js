@@ -8,28 +8,6 @@ const eventCardLocation          = eventCardBuffer.querySelector('#location');
 const eventCardStatus            = eventCardBuffer.querySelector('#status');
 
 
-async function fetchEvents() {
-    const response = await fetch('/event-service/events/', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
-    });
-    if (!response.ok) {
-        throw Error('Unable to fetch events');
-    }
-
-    const events = await response.json();
-    renderEvents(events);
-}
-
-function renderEvents(events) {
-    events.forEach((event) => {
-        const eventCardElement = createEventRow(event);
-        eventContainer.appendChild(eventCardElement);
-    });
-}
-
 function createEventRow(event) {
     eventCardName.textContent        = event.name;
     eventCardDescription.textContent = event.description;
@@ -42,12 +20,53 @@ function createEventRow(event) {
     const eventCardEditButton = eventCardElement.querySelector('.edit');
     const eventCardDeleteButton = eventCardElement.querySelector('.delete');
 
-    eventCardRegistrationButton.textContent = event.is_available ? 'Открыть регистрацию' : 'Закрыть регистрацию';
-    eventCardRegistrationButton.addEventListener('click', () => console.log(123));
+    eventCardRegistrationButton.textContent = !event.is_available ? 'Открыть регистрацию' : 'Закрыть регистрацию';
+    eventCardRegistrationButton.addEventListener('click', async (evt) => {
+        const newEvent = await editEvent(event.id, {is_available: !event.is_available});
+        const eventElement = evt.target.closest('.event-row')
+        eventElement.querySelector('#status').textContent = newEvent.is_available  ? 'Открыто для регистрации' : 'Закрыто для регистрации';          
+        evt.target.textContent                            = !newEvent.is_available ? 'Открыть регистрацию'     : 'Закрыть регистрацию';
+    });
     eventCardEditButton.addEventListener('click', () => console.log(123));
-    eventCardDeleteButton.addEventListener('click', () => console.log(123));
+    eventCardDeleteButton.addEventListener('click', async () => {
+        await deleteEvent(event.id);
+        eventCardElement.remove();
+    });
 
     return eventCardElement;
+}
+
+function renderEvents(events) {
+    events.forEach((event) => {
+        const eventCardElement = createEventRow(event);
+        eventContainer.appendChild(eventCardElement);
+    });
+}
+
+async function fetchEvents() {
+    const response = await request('/event-service/events/', 'GET', {
+        auth_token: token,
+        error: 'Unable to fetch events',
+    });
+    const events = await response.json();
+
+    renderEvents(events);
+}
+
+async function editEvent(eventId, data) {
+    const response = await request(`/event-service/events/${eventId}/`, 'PATCH', {
+        auth_token: token,
+        body: JSON.stringify(data),
+    });
+    const newEvent = await response.json();
+
+    return newEvent;
+}
+
+async function deleteEvent(eventId) {
+    await request(`/event-service/events/${eventId}/`, 'DELETE', {
+        auth_token: token,
+    });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

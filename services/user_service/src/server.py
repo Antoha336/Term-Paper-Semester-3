@@ -57,23 +57,23 @@ def login():
         algorithm='HS256',
     )
 
-    return make_response({'access_token': access_token}, 200)
+    return jsonify({'access_token': access_token}), 200
 
 @app.route('/users/', methods=['POST'])
 def registration():
-    data = request.json
-    name =      data.get('name')
+    data     = request.json
+    name     = data.get('name')
     lastname = data.get('lastname')
-    email =     data.get('email')
-    password =  data.get('password')
+    email    = data.get('email')
+    password = data.get('password')
 
     if not email or not password or not name or not lastname:
-        return make_response({'detail': 'Invalid input'}, 400)
+        return jsonify({'detail': 'Invalid input'}), 400
 
     query = select(User).where(User.email == email)
     user = session.execute(query).scalar()
     if user:
-        return make_response({'detail': 'User with this email already exist'}, 400)
+        return jsonify({'detail': 'User with this email already exist'}), 400
     
     user = User(
         name=name,

@@ -1,13 +1,15 @@
-const eventContainer       = document.querySelector('.events-container');
-const eventCardTemplate    = document.querySelector('#event-card-template').content;
-const eventCardBuffer      = eventCardTemplate.querySelector('.event-card')
-const eventCardName        = eventCardBuffer.querySelector('.event-name');
-const eventCardDate        = eventCardBuffer.querySelector('.event-date');
-const eventCardLocation    = eventCardBuffer.querySelector('.event-location');
+const eventContainer        = document.querySelector('.events-container');
+const eventCardTemplate     = document.querySelector('#event-card-template').content;
+const eventCardBuffer       = eventCardTemplate.querySelector('.event-card')
+const eventCardName         = eventCardBuffer.querySelector('.event-name');
+const eventCardStatus       = eventCardBuffer.querySelector('.event-status');
+const eventCardDate         = eventCardBuffer.querySelector('.event-date');
+const eventCardLocation     = eventCardBuffer.querySelector('.event-location');
 
 const eventModal            = document.querySelector('#event-modal');
 const modalEventName        = eventModal.querySelector('.modal-event-name');
 const modalEventDescription = eventModal.querySelector('.modal-event-description');
+const modalEventStatus      = eventModal.querySelector('.modal-event-status');
 const modalEventLocation    = eventModal.querySelector('.modal-event-location');
 const modalEventDate        = eventModal.querySelector('.modal-event-date');
 const modalRegisterButton   = eventModal.querySelector('.modal-register-button');
@@ -56,6 +58,7 @@ async function showEventDetails(eventId, eventCardElement, deleteCard) {
 
     modalEventName.textContent        = event.name;
     modalEventDescription.textContent = event.description;
+    modalEventStatus.textContent      = event.is_available ? 'Открыта' : 'Закрыта';
     modalEventLocation.textContent    = event.location;
     modalEventDate.textContent        = format_date(event.date);
     
@@ -80,6 +83,7 @@ function renderEvents(events, deleteCard) {
 
         eventCardBuffer.style.backgroundColor = colors[index % colors.length]
         eventCardName.textContent             = event.name;
+        eventCardStatus.textContent           = event.is_available ? 'Регистрация открыта' : 'Регистрация закрыта'; 
         eventCardLocation.textContent         = event.location;
         eventCardDate.textContent             = event.date
         
