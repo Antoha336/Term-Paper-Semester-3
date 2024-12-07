@@ -1,0 +1,62 @@
+name: app-prod
+
+networks:
+  internal:
+    driver: bridge
+
+volumes:
+  db_data:
+
+services:
+  database:
+    build:
+      context: ./services/database
+    container_name: database
+    env_file:
+      - .env
+    ports:
+      - 5431:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - internal
+
+  event-service:
+    build:
+      dockerfile: ./services/event_service/Dockerfile
+      context: .
+    container_name: event-service
+    env_file:
+      - .env
+    restart: unless-stopped
+    depends_on:
+      - database
+    networks:
+      - internal
+    
+  user-service:
+    build:
+      dockerfile: ./services/user_service/Dockerfile
+      context: .
+    container_name: user-service
+    env_file:
+      - .env
+    restart: unless-stopped
+    depends_on:
+      - database
+    networks:
+      - internal
+  
+  frontend:
+    build:
+      context: ./services/frontend
+    container_name: frontend
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    depends_on:
+      - event-service
+      - user-service
+    networks:
+      - internal

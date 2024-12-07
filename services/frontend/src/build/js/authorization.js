@@ -21,6 +21,7 @@ async function check_authorization() {
 async function check_admin_rights() {
     await check_authorization();
     if (!payload['is_admin']) {
+        window.location.href = "index";
         throw Error('Unauthorized');
     }
 }
