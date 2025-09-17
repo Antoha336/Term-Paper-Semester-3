@@ -166,7 +166,6 @@ function openEditEventModal(event) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await check_admin_rights();
     fetchEvents();
 })
 

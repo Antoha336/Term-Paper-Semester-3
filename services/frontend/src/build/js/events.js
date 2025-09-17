@@ -20,7 +20,7 @@ const colors = ['#FF6F61', '#6B5B95', '#88B04B', '#F7CAC9', '#92A8D1', '#FFB347'
 
 function toggleRegistrationButton(is_registered, is_available) {
     modalRegisterButton.disabled      = !is_available;
-    modalRegisterButton.textContent   = is_registered ? 'Отменить регистрацию' : 'Зарегистрироваться';
+    modalRegisterButton.textContent   = is_registered ? 'Отменить регистрацию' : 'Зарегистрироватся';
 }
 
 async function registerForEvent(eventId) {
